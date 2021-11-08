@@ -12,7 +12,8 @@
 # Do not set the adapter.handler in here, it will be ignored.
 # You can choose the adapter like `ramaze start -s mongrel` or set it in the
 # 'start.rb' and use `ruby start.rb` instead.
-require ::File.expand_path('./../hello', __FILE__)
-Ramaze.start(:file => __FILE__, :started => true)
-run Ramaze
+require ::File.expand_path('../app', __FILE__)
 
+Ramaze.start(:root => Ramaze.options.roots, :started => true)
+
+run Ramaze
