@@ -1,35 +1,164 @@
-# Ramaze Application
+# Tutorial: Deploying a basic Ramaze app on Jekyo
 
-Welcome to your new Ramaze application. This README serves as a starting point
-for writing an application using the code you just generated.
+Demo app [here](https://ramaze-demo.jekyo.app/)
 
-Once you've started working on your application you'll probably want to update
-this README so that its contents reflect your application's state and purpose.
+### Prerequisites
 
-## Requirements
+Make sure you have [NodeJS](https://nodejs.org/en/download/), [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) and [git](https://github.com/git-guides/install-git) installed.
 
-In order to run this application you'll need to have Ramaze 2.0.0 or newer and
-Rake. Optionally you can install Bundler and use it for Gem management, this
-can be done as following:
+If it's your first time using **Jekyo**, you can **install** it by running the following command in your terminal:
 
-    $ gem install bundler
-    $ bundle install
+`npm install -g jekyo`
 
-## Rake Tasks
+### Sign in to Jekyo
 
-This application comes with a few predefined Rake tasks that make it easy to
-get started. You can list these tasks by running `rake -T` or `rake -D` (this
-shows longer descriptions for tasks if there are any).
+You can sign in to Jekyo by running `jekyo user:signin`
 
-For example, to start a Ramaze console using Pry you'd run the following
-command:
+```
+➜  ~ jekyo user:signin 
+Your email?: **************
+Your password?: **********
+You have successfully signed in!
+```
+If you don't have a Jekyo account, you can create one in the terminal by running `jekyo user:signup`. 
 
-    $ rake ramaze:pry
+## 1. Create a basic Ramaze app
 
-## Resources
+You can start your Ramaze project by using `jekyo create`
 
-In case you need help you can refer to the following resources:
+Using the **arrows** on your keyboard, select **ramaze** and press **enter**.  
+```
+? Select template
+  None Creates only the application
+  expressjs A basic app skeleton using [Express](https://expressjs.com/)     
+  nuxt-js A boilerplate SSR application using [Nuxt.js](https://nuxtjs.org/) 
+❯ ramaze A basic starter app using [Ramaze](http://ramaze.net/)
+```
+When prompted, enter the desired name for your Ramaze app. 
 
-* Ramaze website: <http://ramaze.net/>
-* Github repository: <https://github.com/ramaze/ramaze>
-* IRC channel: \#ramaze on Freenode
+`Application name?: ramaze-tutorial`
+
+This will create a basic Ramaze app in the current directory by cloning this [Ramaze starter app](https://github.com/jekyo/ramaze-getting-started) repository.
+
+```
+Cloning source code... OK
+Application created!
+```
+
+### Deploy the Ramaze app on Jekyo
+
+To deploy the app, first navigate to the newly created directory:
+
+`cd ramaze-tutorial`
+
+Now you can deploy this app to Jekyo by running: 
+
+`jekyo deploy`
+
+After a while, you should see something like this:
+
+```
+➜  Fetching source code ... OK
+➜  Building application, this might take a while ... OK
+➜  Publishing application, this might take a while  ... OK
+➜  Deploying application ... OK        
+➜  Waiting for application to start ... OK
+➜  Visit your app on: https://ramaze-tutorial.jekyo.app ... OK
+```
+
+You can now browse to your Ramaze app on https://ramaze-tutorial.jekyo.app (replace 'ramaze-tutorial' with your app name)
+
+## 2. Deploying an existing Ramaze app
+
+### Edit ramaze.rake
+
+Edit the `ramaze.rake` file found in **task/** and specify Jekyo's port:
+
+```
+Ramaze.start(
+      :adapter => :webrick,
+      :port    => 4139,
+      :file    => __FILE__,
+      :root    => Ramaze.options.roots
+    )
+  end
+```
+
+### Create a Procfile
+
+Create a file named `Procfile` (no extension) in the root of your app and add the following line:
+
+```
+web: rake ramaze:start
+```
+
+### Edit Gemfile: 
+
+```
+source 'https://rubygems.org'
+gem 'ramaze'
+gem 'rake'
+```
+
+### Commit changes
+
+Initialize a git repository if you haven't already done so by running `git init`. 
+
+```
+git add .
+git commit -m "your commit message"
+```
+
+### Create an empty Jekyo app:
+
+`jekyo create` 
+
+Select 'none' using the **arrows** on your keyboard and press **enter**. This will create an app using your current directory. 
+
+```
+? Select template (Use arrow keys)
+❯ None Creates an application from your current directory
+```
+
+Name your app: 
+
+`Application name?: my-ramaze-app`
+
+Run `jekyo link` to link your local app to the remote Jekyo app. Select 'my-ramaze-app' using the **arrows** on your keyboard and press **enter**.
+
+```
+? Select application (Use arrow keys)
+❯ my-ramaze-app
+```
+### Now you can deploy this app to Jekyo by running: 
+
+`jekyo deploy`
+
+After a while, you should see something like this:
+
+```
+➜  Fetching source code ... OK
+➜  Building application, this might take a while ... OK
+➜  Publishing application, this might take a while  ... OK
+➜  Deploying application ... OK        
+➜  Waiting for application to start ... OK
+➜  Visit your app on: https://my-ramaze-app.jekyo.app ... OK
+```
+
+You can now browse to your Ramaze app on https://my-ramaze-app.jekyo.app (replace 'my-ramaze-app' with your app name)
+
+## Pushing local changes to Jekyo 
+
+Add the newly modified file(s) to the git index by using [git add](https://www.atlassian.com/git/tutorials/saving-changes)
+
+`git add filename`
+
+Create a [git commit](https://github.com/git-guides/git-commit)
+
+`git commit -m "your commit message"`
+
+Now, simply deploy your app again:
+
+`jekyo deploy`
+
+You will see your changes on your live app after a short while. 
