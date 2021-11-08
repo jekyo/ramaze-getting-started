@@ -1,4 +1,3 @@
-source :rubygems
-
-gem 'ramaze', '>= 2.0.0'
+source 'https://rubygems.org'
+gem 'ramaze'
 gem 'rake'
